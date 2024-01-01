@@ -6,13 +6,22 @@ import { hover } from "@/lib/hover";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form";
+import * as yup from "yup";
+import {yupResolver} from '@hookform/resolvers/yup';
 
 type UserAuthForm = {
 	email: string
 	password: string
 }
 
+// membuat validasi menggunakan yup
+const schema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().min(6).required(),
+}).required();
+
+// jadi ketika error, dia baca schema nya. di dalam schema ada kondisi2 nya
 function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -21,7 +30,9 @@ function SignInForm() {
     handleSubmit,
     register,
     formState: { errors }
-  } = useForm<UserAuthForm>({});
+  } = useForm<UserAuthForm>({
+    resolver: yupResolver(schema),
+  });
 
   // untuk check data ketika submit
   // data yg diambil dari userauthform
