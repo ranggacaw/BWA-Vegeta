@@ -6,7 +6,7 @@ import { hover } from "@/lib/hover";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from '@hookform/resolvers/yup';
 
