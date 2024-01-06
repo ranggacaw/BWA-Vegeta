@@ -12,6 +12,9 @@ export async function GET() {
             {
                 id: 2,
                 name: "Duwi"
+            },{
+                id: 3,
+                name: "Ipul"
             },
         ]
     },
@@ -27,8 +30,8 @@ export async function POST() {
         message: 'New user created!',
         data: [
             {
-                id: 3,
-                name: "Ipul"
+                id: 4,
+                name: "Reza"
             },
         ]
     },
