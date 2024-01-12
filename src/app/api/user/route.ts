@@ -1,9 +1,9 @@
+import Response from "@/lib/api.response";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    return NextResponse.json({
-        success: true,
-        message: 'Get all users!',
+    return Response({
+        message: "Get all users",
         data: [
             {
                 id: 1,
@@ -16,17 +16,13 @@ export async function GET() {
                 id: 3,
                 name: "Ipul"
             },
-        ]
-    },
-    {
-        // status 200 di pakai ketika berhasil, kalo misal ga ada biasana pake 404
+        ],
         status: 200,
-    })
+    });
 }
 
 export async function POST() {
-    return NextResponse.json({
-        success: true,
+    return Response({
         message: 'New user created!',
         data: [
             {
@@ -34,9 +30,5 @@ export async function POST() {
                 name: "Reza"
             },
         ]
-    },
-    {
-        // status 200 di pakai ketika berhasil, kalo misal ga ada biasana pake 404
-        status: 200,
-    })
+    });
 }
