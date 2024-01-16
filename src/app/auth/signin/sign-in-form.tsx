@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { hover } from "@/lib/hover";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from '@hookform/resolvers/yup';
+import { signIn } from 'next-auth/react';
+import { useToast } from "@/components/ui/use-toast";
 
 type UserAuthForm = {
 	email: string
@@ -25,7 +27,9 @@ const schema = yup.object({
 function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
+  const {toast} = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     handleSubmit,
     register,
@@ -36,8 +40,33 @@ function SignInForm() {
 
   // untuk check data ketika submit
   // data yg diambil dari userauthform
-  const onSubmit = (data: UserAuthForm) => {
-    console.log("🚀 ~ file: sign-in-form.tsx:30 ~ onSubmit ~ data:", data)
+  const onSubmit = async (data: UserAuthForm) => {
+    try {
+      const user = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+
+        // fungsi callbackurl buat nyimpen url sebelum masuk ke page yg butuuh auth dan sejenisnya. nah abis kita login dia bakalan ngelempar ke page yg di mau tuju
+        callbackUrl: searchParams.get("callbackUrl") || "/",
+        redirect: false,
+      });
+
+      if (!user?.error) {
+        router.push(user?.url || "/")
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: "Please check your email or password",
+          variant: "destructive",
+          duration: 3000,
+        })
+      }
+      
+      // console.log("🚀 ~ file: sign-in-form.tsx:51 ~ onSubmit ~ user:", user);
+
+    } catch (error) {
+      console.log("🚀 ~ file: sign-in-form.tsx:54 ~ onSubmit ~ error:", error)
+    }
   }
 
   return (
